@@ -16,6 +16,9 @@ const Workspace = ({
             case 'pen':
                 addPen(pos);
                 break;
+            case 'rectangle':
+                addRectangle(pos);
+                break;
         }
     }
 
@@ -34,6 +37,9 @@ const Workspace = ({
             case 'pen':
                 makePen(point, lastObject);
                 break;
+            case 'rectangle':
+                makeRectangle(point, lastObject);
+                break;
         }
     }
  
@@ -49,9 +55,32 @@ const Workspace = ({
         }]); 
     }
 
+    const addRectangle = (pos) => {
+        setDrawingList([...drawingList, { 
+            type, 
+            x: pos.x,
+            y: pos.y,
+            width: 0,
+            height: 0,
+            stroke: color,
+            strokeWidth: size,
+            cornerRadius: 0,
+        }]); 
+    }
+
     const makePen = (point, lastObject) => {
         // add point
         lastObject.points = lastObject.points.concat([point.x, point.y]);
+    
+        // replace last
+        drawingList.splice(drawingList.length - 1, 1, lastObject);
+        setDrawingList(drawingList.concat());
+    }
+
+    const makeRectangle = (point, lastObject) => {
+        // resize
+        lastObject.width = point.x - lastObject.x;
+        lastObject.height = point.y - lastObject.y;
     
         // replace last
         drawingList.splice(drawingList.length - 1, 1, lastObject);
@@ -71,6 +100,18 @@ const Workspace = ({
             }/>
     );
 
+    const drawingRectangle = (object, i) => (
+        <Rect
+            key={i}
+            x={object.x}
+            y={object.y}
+            width={object.width}
+            height={object.height}
+            stroke={object.stroke}
+            strokeWidth={object.strokeWidth}
+            cornerRadius={object.cornerRadius}/>
+    )
+
     return (
         <Stage 
             width={window.innerWidth} 
@@ -83,6 +124,8 @@ const Workspace = ({
                     switch(object.type){
                         case 'pen':
                             return drawingPen(object, i);
+                        case 'rectangle':
+                            return drawingRectangle(object, i);
                     }
                 })}
             </Layer>
