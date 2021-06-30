@@ -6,7 +6,8 @@ import React, { useState } from 'react';
 function App() {
   const [ state, setState ] = useState({
     type: '',
-    color: 'black',
+    strokeColor: '#000000',
+    fillColor: '#aaaaaa',
     size: 1,
   });
 
