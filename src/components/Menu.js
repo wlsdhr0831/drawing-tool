@@ -23,6 +23,9 @@ const Menu = ({ state, setState, undo, redo }) => {
             <button onClick={undo}>뒤로 돌리기</button>
             <button onClick={redo}>앞으로 돌리기</button>
             <button 
+                id="pen"
+                onClick={changeType}>펜</button>
+            <button 
                 id="line"
                 onClick={changeType}>직선</button>
             <button
