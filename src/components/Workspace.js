@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Stage, Layer, Line, Rect, Ellipse } from 'react-konva';
 
 const Workspace = ({ 
-    state, drawingList, setDrawingList, setDeleteList }) => {
+    state, drawingList, setDrawingList, deleteList, setDeleteList }) => {
 
     const [ isDrawing, setIsDrawing ] = useState(false);
     const { type, strokeColor, fillColor, size } = state;
@@ -21,6 +21,9 @@ const Workspace = ({
                 break;
             case 'circle':
                 addCircle(pos);
+                break;
+            case 'eraser':
+                remove(e);
                 break;
         }
     };
@@ -48,6 +51,15 @@ const Workspace = ({
                 break;
         }
     };
+
+    const remove = (e) => {
+        if(e.target.children) return;
+
+        const idx = e.target.index;
+        setDrawingList(drawingList.filter((object, i) => { 
+            if(i != idx) return object;
+        }));
+    }
  
     const addPen = (pos) => {
         setDrawingList([...drawingList, { 
