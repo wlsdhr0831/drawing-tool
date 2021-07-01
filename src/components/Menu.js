@@ -1,3 +1,5 @@
+import styles from './Menu.module.css';
+
 const Menu = ({ state, setState, undo, redo, exportImage }) => {
 
     const changeType = (e) => {
@@ -19,20 +21,20 @@ const Menu = ({ state, setState, undo, redo, exportImage }) => {
     }
 
     return (
-        <div>
-            <button onClick={undo}>뒤로 돌리기</button>
-            <button onClick={redo}>앞으로 돌리기</button>
-            {/* <button onClick={}>이미지 올리기</button> */}
-            <button onClick={exportImage}>이미지 다운로드</button>
+        <div className={styles.menu}>
+            <button onClick={undo}>←</button>
+            <button onClick={redo}>→</button>
+            {/* <button onClick={}>📷🔍</button> */}
+            <button onClick={exportImage}>💾</button>
             <button
                 id="eraser"
-                onClick={changeType}>지우개</button>
-            <button
+                onClick={changeType}>🗑</button>
+            {/* <button
                 id="move"
-                onClick={changeType}>손</button>
+                onClick={changeType}>🖐🏻</button> */}
             <button 
                 id="pen"
-                onClick={changeType}>펜</button>
+                onClick={changeType}>🖋</button>
             {/* <button 
                 id="line"
                 onClick={changeType}>직선</button>
@@ -41,10 +43,10 @@ const Menu = ({ state, setState, undo, redo, exportImage }) => {
                 onClick={changeType}>곡선</button> */}
             <button
                 id="circle"
-                onClick={changeType}>원</button>
+                onClick={changeType}>⚪</button>
             <button
                 id="rectangle"
-                onClick={changeType}>직사각형</button>
+                onClick={changeType}>⬜</button>
             {/* <button
                 id="multiangle"
                 onClick={changeType}>다각형</button> */}
@@ -53,14 +55,18 @@ const Menu = ({ state, setState, undo, redo, exportImage }) => {
                 name="size"
                 onChange={change}
                 value={state.size}/>
-            <span>선 색상</span>
+            <span>선</span>
             <input
                 name="strokeColor"
+                type="color"
+                className={styles.color}
                 onChange={change}
                 value={state.strokeColor}/>
-            <span>채우기 색상</span>
+            <span>채우기</span>
             <input
                 name="fillColor"
+                type="color"
+                className={styles.color}
                 onChange={change}
                 value={state.fillColor}/>
         </div>
