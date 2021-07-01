@@ -1,4 +1,4 @@
-const Menu = ({ state, setState, undo, redo }) => {
+const Menu = ({ state, setState, undo, redo, exportImage }) => {
 
     const changeType = (e) => {
         const { id } = e.target;
@@ -22,6 +22,8 @@ const Menu = ({ state, setState, undo, redo }) => {
         <div>
             <button onClick={undo}>뒤로 돌리기</button>
             <button onClick={redo}>앞으로 돌리기</button>
+            {/* <button onClick={}>이미지 올리기</button> */}
+            <button onClick={exportImage}>이미지 다운로드</button>
             <button
                 id="eraser"
                 onClick={changeType}>지우개</button>
