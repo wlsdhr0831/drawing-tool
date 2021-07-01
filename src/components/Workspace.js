@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Stage, Layer, Line, Rect, Ellipse } from 'react-konva';
 
 const Workspace = ({ 
-    state, drawingList, setDrawingList, deleteList, setDeleteList }) => {
+    stageRef, state, drawingList, setDrawingList, deleteList, setDeleteList }) => {
 
     const [ isDrawing, setIsDrawing ] = useState(false);
     const { type, strokeColor, fillColor, size } = state;
@@ -57,7 +57,7 @@ const Workspace = ({
 
         const idx = e.target.index;
         setDrawingList(drawingList.filter((object, i) => { 
-            if(i != idx) return object;
+            if(i !== idx) return object;
         }));
     }
  
@@ -170,6 +170,7 @@ const Workspace = ({
 
     return (
         <Stage 
+            ref={stageRef}
             width={window.innerWidth} 
             height={window.innerHeight}
             onMouseDown={onMouseDown}
