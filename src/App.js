@@ -29,7 +29,16 @@ function App() {
   };
 
   const redo = () => {
-    alert("앞으로 가기");
+    if(deleteList.length === 0) return ;
+
+    setDrawingList([
+      ...drawingList,
+      deleteList[deleteList.length-1],
+    ]);
+
+    setDeleteList(deleteList.filter((object, i) => { 
+      if(i !== deleteList.length-1) return object;
+    }));
   };
 
   const downloadURI = (uri, name) => {
