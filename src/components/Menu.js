@@ -55,12 +55,12 @@ const Menu = ({ state, setState, undo, redo, exportImage }) => {
                 value={state.size}/>
             <span>선 색상</span>
             <input
-                name="color"
+                name="strokeColor"
                 onChange={change}
                 value={state.strokeColor}/>
             <span>채우기 색상</span>
             <input
-                name="color"
+                name="fillColor"
                 onChange={change}
                 value={state.fillColor}/>
         </div>
