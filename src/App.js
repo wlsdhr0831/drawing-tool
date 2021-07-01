@@ -68,7 +68,6 @@ function App() {
         state={state}
         drawingList={drawingList}
         setDrawingList={setDrawingList}
-        deleteList={deleteList}
         setDeleteList={setDeleteList}/>
     </div>
   );

@@ -2,24 +2,25 @@ import React, { useState } from 'react';
 import { Stage, Layer, Line, Rect, Ellipse } from 'react-konva';
 
 const Workspace = ({ 
-    stageRef, state, drawingList, setDrawingList, deleteList, setDeleteList }) => {
+    stageRef, state, drawingList, setDrawingList, setDeleteList }) => {
 
     const [ isDrawing, setIsDrawing ] = useState(false);
     const { type, strokeColor, fillColor, size } = state;
 
     const onMouseDown = (e) => {
-        setIsDrawing(true);
-
         const pos = e.target.getStage().getPointerPosition();
 
         switch(type){
             case 'pen':
+                setIsDrawing(true);
                 addPen(pos);
                 break;
             case 'rectangle':
+                setIsDrawing(true);
                 addRectangle(pos);
                 break;
             case 'circle':
+                setIsDrawing(true);
                 addCircle(pos);
                 break;
             case 'eraser':
@@ -36,6 +37,7 @@ const Workspace = ({
         if(!isDrawing) return ;
         
         setDeleteList([]);
+        
         const stage = e.target.getStage();
         const point = stage.getPointerPosition();
         let lastObject = drawingList[drawingList.length - 1];
