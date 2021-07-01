@@ -23,11 +23,18 @@ function App() {
     alert("앞으로 가기");
   };
 
+  const downloadURI = (uri, name) => {
+    var link = document.createElement("a");
+    link.download = name;
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   const exportImage = () => {
-    // alert("다운로드");
-    
     const uri = stageRef.current.toDataURL();
-    console.log(uri);
+    downloadURI(uri, 'image.jpg');
   };
 
   return (
