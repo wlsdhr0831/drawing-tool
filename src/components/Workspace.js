@@ -35,6 +35,7 @@ const Workspace = ({
     const onMouseMove = (e) => {
         if(!isDrawing) return ;
         
+        setDeleteList([]);
         const stage = e.target.getStage();
         const point = stage.getPointerPosition();
         let lastObject = drawingList[drawingList.length - 1];

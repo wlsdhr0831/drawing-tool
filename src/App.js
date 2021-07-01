@@ -16,11 +16,29 @@ function App() {
   const stageRef = useRef(null);
 
   const undo = () => {
-    alert("뒤로가기");
+    if(drawingList.length === 0) return;
+
+    setDeleteList([
+      ...deleteList,
+      drawingList[drawingList.length-1],
+    ]);
+
+    setDrawingList(drawingList.filter((object, i) => { 
+      if(i !== drawingList.length-1) return object;
+    }));
   };
 
   const redo = () => {
-    alert("앞으로 가기");
+    if(deleteList.length === 0) return ;
+
+    setDrawingList([
+      ...drawingList,
+      deleteList[deleteList.length-1],
+    ]);
+
+    setDeleteList(deleteList.filter((object, i) => { 
+      if(i !== deleteList.length-1) return object;
+    }));
   };
 
   const downloadURI = (uri, name) => {
