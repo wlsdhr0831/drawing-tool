@@ -72,8 +72,6 @@ const Workspace = ({
     }
  
     const addImage = (image) => {
-
-        console.log(image);
         setDrawingList([...drawingList, { 
             type, 
             x: 0,

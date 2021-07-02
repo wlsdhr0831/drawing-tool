@@ -11,7 +11,7 @@ const Menu = ({ state, setState, undo, redo, exportImage }) => {
             ...state,
             type: id,
         });
-    }
+    };
 
     const change = (e)  => {
         const { name, value } = e.target;
@@ -20,24 +20,23 @@ const Menu = ({ state, setState, undo, redo, exportImage }) => {
             ...state,
             [name]: value,
         });
-    }
+    };
 
     const importImage = (e) => {
         e.preventDefault();
         inputRef.current.click();
-    }
+    };
 
     const selectImage = (e) => {
         if(!e.target.files) return ;
         
         const img = e.target.files[0];
-        
         setState({
             ...state,
             type: 'image',
             img,
-        })
-    }
+        });
+    };
 
     return (
         <div className={styles.menu}>
@@ -94,7 +93,7 @@ const Menu = ({ state, setState, undo, redo, exportImage }) => {
                 onChange={change}
                 value={state.fillColor}/>
         </div>
-    )
+    );
 }
 
 export default Menu;

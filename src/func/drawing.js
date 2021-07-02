@@ -4,13 +4,14 @@ import useImage from 'use-image';
 
 const DrawingImage = ({ object }) => {
     const [image] = useImage(object.image);
-    
+
     return <Image
         x={object.x}
         y={object.y}
         image={image}
         width={object.width}
-        height={object.height}/>
+        height={object.height}
+        draggable={true}/>
 };
 
 export default DrawingImage; 
