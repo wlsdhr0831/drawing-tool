@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
-import { Stage, Layer, Line, Rect, Ellipse } from 'react-konva';
+import React, { useEffect, useState } from 'react';
+import { Stage, Layer, Line, Rect, Ellipse, Image } from 'react-konva';
+import useImage from 'use-image';
 
 const Workspace = ({ 
     stageRef, state, drawingList, setDrawingList, setDeleteList }) => {
 
     const [ isDrawing, setIsDrawing ] = useState(false);
     const { type, strokeColor, fillColor, size } = state;
+
+    useEffect(() => {
+        if(state.type === 'image') {
+            const url = URL.createObjectURL(state.img);
+            addImage(url);
+        }
+    }, [state]);
 
     const onMouseDown = (e) => {
         const pos = e.target.getStage().getPointerPosition();
@@ -64,6 +72,21 @@ const Workspace = ({
         }));
     }
  
+    const addImage = (url) => {
+        // console.log(url);
+
+        const [image] = useImage(url);
+
+        setDrawingList([...drawingList, { 
+            type, 
+            x: 0,
+            y: 0,
+            image,
+            width: 100,
+            height: 100,
+        }]); 
+    };
+
     const addPen = (pos) => {
         setDrawingList([...drawingList, { 
             type, 
@@ -133,6 +156,16 @@ const Workspace = ({
         setDrawingList(drawingList.concat());
     }
 
+    const drawingImage = (object, i) => (
+        <Image
+            key={i}
+            x={object.x}
+            y={object.y}
+            image={object.image}
+            width={object.width}
+            height={object.height}/>
+    );
+
     const drawingPen = (object, i) => (
         <Line
             key={i}
@@ -188,6 +221,8 @@ const Workspace = ({
                             return drawingRectangle(object, i);
                         case 'circle':
                             return drawingCircle(object, i);
+                        case 'image':
+                            return drawingImage(object, i);
                     }
                 })}
             </Layer>
