@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Stage, Layer, Line, Rect, Ellipse, Image } from 'react-konva';
-import useImage from 'use-image';
+import { Stage, Layer } from 'react-konva';
+import DrawingImage, { drawingPen, drawingRectangle, drawingCircle } from '../func/drawing';
 
 const Workspace = ({ 
     stageRef, state, drawingList, setDrawingList, setDeleteList }) => {
@@ -9,9 +9,8 @@ const Workspace = ({
     const { type, strokeColor, fillColor, size } = state;
 
     useEffect(() => {
-        if(state.type === 'image') {
-            const url = URL.createObjectURL(state.img);
-            addImage(url);
+        if(state.type === 'image' && state.img) {
+            addImage(state.img);        
         }
     }, [state]);
 
@@ -72,18 +71,16 @@ const Workspace = ({
         }));
     }
  
-    const addImage = (url) => {
-        // console.log(url);
-        
-        const [image] = useImage('https://konvajs.org/assets/lion.png');
+    const addImage = (image) => {
 
+        console.log(image);
         setDrawingList([...drawingList, { 
             type, 
             x: 0,
             y: 0,
-            image: image,
-            width: 100,
-            height: 100,
+            image: URL.createObjectURL(image),
+            width: 300,
+            height: 300,
         }]); 
     };
 
@@ -156,54 +153,6 @@ const Workspace = ({
         setDrawingList(drawingList.concat());
     }
 
-    const DrawingImage = (object, i) => (
-        <Image
-            key={i}
-            x={object.x}
-            y={object.y}
-            image={object.image}
-            width={object.width}
-            height={object.height}/>
-    );
-
-    const DrawingPen = (object, i) => (
-        <Line
-            key={i}
-            points={object.points}
-            stroke={object.stroke}
-            strokeWidth={object.strokeWidth}
-            tension={object.tension}
-            lineCap={object.lineCap}
-            globalCompositeOperation={
-                object.tool === 'eraser' ? 'destination-out' : 'source-over' 
-            }/>
-    );
-
-    const DrawingRectangle = (object, i) => (
-        <Rect
-            key={i}
-            x={object.x}
-            y={object.y}
-            width={object.width}
-            height={object.height}
-            fill={object.fill}
-            stroke={object.stroke}
-            strokeWidth={object.strokeWidth}
-            cornerRadius={object.cornerRadius}/>
-    );
-
-    const DrawingCircle = (object, i) => (
-        <Ellipse
-            key={i}
-            x={object.x}
-            y={object.y}
-            radiusX={object.radiusX}
-            radiusY={object.radiusY}
-            fill={object.fill}
-            stroke={object.stroke}
-            strokeWidth={object.strokeWidth}/>
-    )
-
     return (
         <Stage 
             ref={stageRef}
@@ -216,13 +165,13 @@ const Workspace = ({
                 {drawingList.map(( object, i) => {
                     switch(object.type){
                         case 'pen':
-                            return <DrawingPen object={object} i={i}/>;
+                            return drawingPen(object, i);
                         case 'rectangle':
-                            return <DrawingRectangle object={object} i={i}/>;
+                            return drawingRectangle(object, i);
                         case 'circle':
-                            return <DrawingCircle object={object} i={i}/>;
+                            return drawingCircle(object, i);
                         case 'image':
-                            return <DrawingImage object={object} i={i}/>;
+                            return <DrawingImage key={i} object={object}/>;
                     }
                 })}
             </Layer>
