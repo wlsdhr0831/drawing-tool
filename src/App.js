@@ -9,6 +9,7 @@ function App() {
     strokeColor: '#000000',
     fillColor: '#aaaaaa',
     size: 1,
+    img: null,
   });
 
   const [ drawingList, setDrawingList ] = useState([]);

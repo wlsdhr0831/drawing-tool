@@ -1,6 +1,8 @@
+import { useRef } from 'react';
 import styles from './Menu.module.css';
 
 const Menu = ({ state, setState, undo, redo, exportImage }) => {
+    const inputRef = useRef();
 
     const changeType = (e) => {
         const { id } = e.target;
@@ -9,7 +11,7 @@ const Menu = ({ state, setState, undo, redo, exportImage }) => {
             ...state,
             type: id,
         });
-    }
+    };
 
     const change = (e)  => {
         const { name, value } = e.target;
@@ -18,14 +20,35 @@ const Menu = ({ state, setState, undo, redo, exportImage }) => {
             ...state,
             [name]: value,
         });
-    }
+    };
+
+    const importImage = (e) => {
+        e.preventDefault();
+        inputRef.current.click();
+    };
+
+    const selectImage = (e) => {
+        if(!e.target.files) return ;
+        
+        const img = e.target.files[0];
+        setState({
+            ...state,
+            type: 'image',
+            img,
+        });
+    };
 
     return (
         <div className={styles.menu}>
             <button onClick={undo}>←</button>
             <button onClick={redo}>→</button>
-            {/* <button onClick={}>📷🔍</button> */}
             <button onClick={exportImage}>💾</button>
+            <button onClick={importImage}>🖼</button>
+            <input 
+                type="file"
+                ref={inputRef}
+                className={styles.import_image}
+                onChange={selectImage}/>
             <button
                 id="eraser"
                 onClick={changeType}>🗑</button>
@@ -70,7 +93,7 @@ const Menu = ({ state, setState, undo, redo, exportImage }) => {
                 onChange={change}
                 value={state.fillColor}/>
         </div>
-    )
+    );
 }
 
 export default Menu;

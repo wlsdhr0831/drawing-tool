@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
-import { Stage, Layer, Line, Rect, Ellipse } from 'react-konva';
+import React, { useEffect, useState } from 'react';
+import { Stage, Layer } from 'react-konva';
+import DrawingImage, { drawingPen, drawingRectangle, drawingCircle } from '../func/drawing';
 
 const Workspace = ({ 
     stageRef, state, drawingList, setDrawingList, setDeleteList }) => {
 
     const [ isDrawing, setIsDrawing ] = useState(false);
     const { type, strokeColor, fillColor, size } = state;
+
+    useEffect(() => {
+        if(state.type === 'image' && state.img) {
+            addImage(state.img);        
+        }
+    }, [state]);
 
     const onMouseDown = (e) => {
         const pos = e.target.getStage().getPointerPosition();
@@ -64,6 +71,17 @@ const Workspace = ({
         }));
     }
  
+    const addImage = (image) => {
+        setDrawingList([...drawingList, { 
+            type, 
+            x: 0,
+            y: 0,
+            image: URL.createObjectURL(image),
+            width: 300,
+            height: 300,
+        }]); 
+    };
+
     const addPen = (pos) => {
         setDrawingList([...drawingList, { 
             type, 
@@ -133,44 +151,6 @@ const Workspace = ({
         setDrawingList(drawingList.concat());
     }
 
-    const drawingPen = (object, i) => (
-        <Line
-            key={i}
-            points={object.points}
-            stroke={object.stroke}
-            strokeWidth={object.strokeWidth}
-            tension={object.tension}
-            lineCap={object.lineCap}
-            globalCompositeOperation={
-                object.tool === 'eraser' ? 'destination-out' : 'source-over' 
-            }/>
-    );
-
-    const drawingRectangle = (object, i) => (
-        <Rect
-            key={i}
-            x={object.x}
-            y={object.y}
-            width={object.width}
-            height={object.height}
-            fill={object.fill}
-            stroke={object.stroke}
-            strokeWidth={object.strokeWidth}
-            cornerRadius={object.cornerRadius}/>
-    );
-
-    const drawingCircle = (object, i) => (
-        <Ellipse
-            key={i}
-            x={object.x}
-            y={object.y}
-            radiusX={object.radiusX}
-            radiusY={object.radiusY}
-            fill={object.fill}
-            stroke={object.stroke}
-            strokeWidth={object.strokeWidth}/>
-    )
-
     return (
         <Stage 
             ref={stageRef}
@@ -188,6 +168,8 @@ const Workspace = ({
                             return drawingRectangle(object, i);
                         case 'circle':
                             return drawingCircle(object, i);
+                        case 'image':
+                            return <DrawingImage key={i} object={object}/>;
                     }
                 })}
             </Layer>
