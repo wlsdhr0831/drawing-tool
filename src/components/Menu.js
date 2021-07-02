@@ -40,11 +40,11 @@ const Menu = ({ state, setState, undo, redo, exportImage }) => {
     }
 
     return (
-        <div className={styles.menu}>🔍
+        <div className={styles.menu}>
             <button onClick={undo}>←</button>
             <button onClick={redo}>→</button>
             <button onClick={exportImage}>💾</button>
-            <button onClick={importImage}>📷</button>
+            <button onClick={importImage}>🖼</button>
             <input 
                 type="file"
                 ref={inputRef}

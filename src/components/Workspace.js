@@ -74,14 +74,14 @@ const Workspace = ({
  
     const addImage = (url) => {
         // console.log(url);
-
-        const [image] = useImage(url);
+        
+        const [image] = useImage('https://konvajs.org/assets/lion.png');
 
         setDrawingList([...drawingList, { 
             type, 
             x: 0,
             y: 0,
-            image,
+            image: image,
             width: 100,
             height: 100,
         }]); 
@@ -156,7 +156,7 @@ const Workspace = ({
         setDrawingList(drawingList.concat());
     }
 
-    const drawingImage = (object, i) => (
+    const DrawingImage = (object, i) => (
         <Image
             key={i}
             x={object.x}
@@ -166,7 +166,7 @@ const Workspace = ({
             height={object.height}/>
     );
 
-    const drawingPen = (object, i) => (
+    const DrawingPen = (object, i) => (
         <Line
             key={i}
             points={object.points}
@@ -179,7 +179,7 @@ const Workspace = ({
             }/>
     );
 
-    const drawingRectangle = (object, i) => (
+    const DrawingRectangle = (object, i) => (
         <Rect
             key={i}
             x={object.x}
@@ -192,7 +192,7 @@ const Workspace = ({
             cornerRadius={object.cornerRadius}/>
     );
 
-    const drawingCircle = (object, i) => (
+    const DrawingCircle = (object, i) => (
         <Ellipse
             key={i}
             x={object.x}
@@ -216,13 +216,13 @@ const Workspace = ({
                 {drawingList.map(( object, i) => {
                     switch(object.type){
                         case 'pen':
-                            return drawingPen(object, i);
+                            return <DrawingPen object={object} i={i}/>;
                         case 'rectangle':
-                            return drawingRectangle(object, i);
+                            return <DrawingRectangle object={object} i={i}/>;
                         case 'circle':
-                            return drawingCircle(object, i);
+                            return <DrawingCircle object={object} i={i}/>;
                         case 'image':
-                            return drawingImage(object, i);
+                            return <DrawingImage object={object} i={i}/>;
                     }
                 })}
             </Layer>
