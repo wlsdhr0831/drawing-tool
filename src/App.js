@@ -17,16 +17,6 @@ function App() {
   const [ redoList, setRedoList ] = useState([[]]);
   const stageRef = useRef(null);
 
-  useEffect(() => {
-    console.log("undo", undoList);
-    console.log("그림", drawingList);
-  }, [undoList]);
-
-  useEffect(() => {
-    console.log("redo", redoList);
-    console.log("그림", drawingList);
-  }, [redoList]);
-
   const undo = () => {
     if(undoList.length <= 1) return;
 

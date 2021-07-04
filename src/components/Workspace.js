@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Stage, Layer } from 'react-konva';
-import DrawingImage, { drawingPen, drawingRectangle, drawingCircle } from '../func/drawing';
+import DrawingImage, { drawingPen, drawingRectangle, drawingCircle, drawingStar } from '../func/drawing';
 
 const Workspace = ({ 
     stageRef, state, drawingList, setDrawingList, add, erase }) => {
@@ -10,6 +10,7 @@ const Workspace = ({
 
     useEffect(() => {
         if(state.type === 'image' && state.img) {
+            add();
             addImage(state.img);        
         }
     }, [state]);
@@ -32,6 +33,11 @@ const Workspace = ({
                 add();
                 setIsDrawing(true);
                 addCircle(pos);
+                break;
+            case 'star':
+                add();
+                setIsDrawing(true);
+                addStar(pos);
                 break;
             case 'eraser':
                 remove(e);
@@ -59,6 +65,9 @@ const Workspace = ({
                 break;
             case 'circle':
                 makeCircle(point, lastObject);
+                break;
+            case 'star':
+                makeStar(point, lastObject);
                 break;
         }
     };
@@ -121,6 +130,20 @@ const Workspace = ({
         }]); 
     }
 
+    const addStar = (pos) => {
+        setDrawingList([...drawingList, { 
+            type, 
+            x: pos.x,
+            y: pos.y,
+            numPoints: 5,
+            innerRadius: 40,
+            outerRadius: 70,
+            fill: fillColor,
+            stroke: strokeColor,
+            strokeWidth: size,
+        }]); 
+    }
+
     const makePen = (point, lastObject) => {
         // add point
         lastObject.points = lastObject.points.concat([point.x, point.y]);
@@ -150,6 +173,16 @@ const Workspace = ({
         setDrawingList(drawingList.concat());
     }
 
+    const makeStar = (point, lastObject) => {
+        // resize
+        lastObject.outerRadius = Math.abs(point.x - lastObject.x);
+        lastObject.innerRadius = Math.abs(point.y - lastObject.y);
+    
+        // replace last
+        drawingList.splice(drawingList.length - 1, 1, lastObject);
+        setDrawingList(drawingList.concat());
+    }
+
     return (
         <Stage 
             ref={stageRef}
@@ -167,6 +200,8 @@ const Workspace = ({
                             return drawingRectangle(object, i);
                         case 'circle':
                             return drawingCircle(object, i);
+                        case 'star':
+                            return drawingStar(object, i);
                         case 'image':
                             return <DrawingImage key={i} object={object}/>;
                     }
