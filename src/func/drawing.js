@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { Line, Rect, Ellipse, Image } from 'react-konva';
+import { Line, Rect, Ellipse, Image, Star } from 'react-konva';
 import useImage from 'use-image';
 
 const DrawingImage = ({ object }) => {
@@ -49,6 +48,19 @@ export const drawingCircle = (object, i) => (
         y={object.y}
         radiusX={object.radiusX}
         radiusY={object.radiusY}
+        fill={object.fill}
+        stroke={object.stroke}
+        strokeWidth={object.strokeWidth}/>
+)
+
+export const drawingStar = (object, i) => (
+    <Star
+        key={i}
+        x={object.x}
+        y={object.y}
+        numPoints={object.numPoints}
+        innerRadius={object.innerRadius}
+        outerRadius={object.outerRadius}
         fill={object.fill}
         stroke={object.stroke}
         strokeWidth={object.strokeWidth}/>
