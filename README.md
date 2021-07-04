@@ -1,5 +1,11 @@
 # 벡터 기반의 드로잉 툴 구현
 
+## 실행 방법
+```
+    npm install
+    yarn start
+```
+
 ## 사용 기술
 - React
 - Konva.js
