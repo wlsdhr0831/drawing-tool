@@ -3,7 +3,7 @@ import { Stage, Layer } from 'react-konva';
 import DrawingImage, { drawingPen, drawingRectangle, drawingCircle } from '../func/drawing';
 
 const Workspace = ({ 
-    stageRef, state, drawingList, setDrawingList, setDeleteList }) => {
+    stageRef, state, drawingList, setDrawingList, add, erase }) => {
 
     const [ isDrawing, setIsDrawing ] = useState(false);
     const { type, strokeColor, fillColor, size } = state;
@@ -19,14 +19,17 @@ const Workspace = ({
 
         switch(type){
             case 'pen':
+                add();
                 setIsDrawing(true);
                 addPen(pos);
                 break;
             case 'rectangle':
+                add();
                 setIsDrawing(true);
                 addRectangle(pos);
                 break;
             case 'circle':
+                add();
                 setIsDrawing(true);
                 addCircle(pos);
                 break;
@@ -42,8 +45,6 @@ const Workspace = ({
 
     const onMouseMove = (e) => {
         if(!isDrawing) return ;
-        
-        setDeleteList([]);
         
         const stage = e.target.getStage();
         const point = stage.getPointerPosition();
@@ -66,9 +67,7 @@ const Workspace = ({
         if(e.target.children) return;
 
         const idx = e.target.index;
-        setDrawingList(drawingList.filter((object, i) => { 
-            if(i !== idx) return object;
-        }));
+        erase(idx);
     }
  
     const addImage = (image) => {
@@ -160,7 +159,7 @@ const Workspace = ({
             onMouseMove={onMouseMove}
             onMouseUp={onMouseUp}>
             <Layer>
-                {drawingList.map(( object, i) => {
+                {drawingList && drawingList.map(( object, i) => {
                     switch(object.type){
                         case 'pen':
                             return drawingPen(object, i);

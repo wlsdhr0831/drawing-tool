@@ -1,7 +1,7 @@
 import './App.css';
 import Menu from './components/Menu.js';
 import Workspace from './components/Workspace.js';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 function App() {
   const [ state, setState ] = useState({
@@ -13,34 +13,68 @@ function App() {
   });
 
   const [ drawingList, setDrawingList ] = useState([]);
-  const [ deleteList, setDeleteList ] = useState([]);
+  const [ undoList, setUndoList ] = useState([[]]);
+  const [ redoList, setRedoList ] = useState([[]]);
   const stageRef = useRef(null);
 
-  const undo = () => {
-    if(drawingList.length === 0) return;
+  useEffect(() => {
+    console.log("undo", undoList);
+    console.log("그림", drawingList);
+  }, [undoList]);
 
-    setDeleteList([
-      ...deleteList,
-      drawingList[drawingList.length-1],
+  useEffect(() => {
+    console.log("redo", redoList);
+    console.log("그림", drawingList);
+  }, [redoList]);
+
+  const undo = () => {
+    if(undoList.length <= 1) return;
+
+    setRedoList([
+      ...redoList,
+      [ ...drawingList],
     ]);
 
-    setDrawingList(drawingList.filter((object, i) => { 
-      if(i !== drawingList.length-1) return object;
+    setDrawingList(undoList[undoList.length-1]);
+
+    setUndoList(undoList.filter((object, i) => {
+      if(i !== undoList.length-1) return object;
     }));
   };
 
   const redo = () => {
-    if(deleteList.length === 0) return ;
+    if(redoList.length <= 1) return ;
 
-    setDrawingList([
-      ...drawingList,
-      deleteList[deleteList.length-1],
+    setUndoList([
+      ...undoList,
+      [ ...drawingList],
     ]);
 
-    setDeleteList(deleteList.filter((object, i) => { 
-      if(i !== deleteList.length-1) return object;
+    setDrawingList(redoList[redoList.length-1]);
+
+    setRedoList(redoList.filter((object, i) => {
+      if(i !== redoList.length-1) return object;
     }));
   };
+
+  const add = () => {
+    setRedoList([[]]);
+
+    const current = drawingList;
+    
+    setUndoList([
+      ...undoList,
+      [ ...current],
+    ]);
+  }
+
+  const erase = (idx) => {
+    add();
+
+    setDrawingList(drawingList.filter((object, i) => { 
+        if(i !== idx) return object;
+    }));
+  }
 
   const downloadURI = (uri, name) => {
     var link = document.createElement("a");
@@ -69,7 +103,8 @@ function App() {
         state={state}
         drawingList={drawingList}
         setDrawingList={setDrawingList}
-        setDeleteList={setDeleteList}/>
+        add={add}
+        erase={erase}/>
     </div>
   );
 }
